@@ -21,9 +21,18 @@ class CreateMapping
     YAML.load(content)["docid"].select { |d| d["type"] == "DOI" }.first["id"]
   end
 
+  def self.source_from_bibxml(content)
+    REXML::Document.new(content).get_elements("reference")
+      .first.attributes["target"]
+  end
+
+  def self.source_from_relaton(content)
+    YAML.load(content)["link"].select { |d| d["type"] == "doi" }.first["content"]
+  end
+
   def mapping
-    @bibxml_mapping.map do |doi, bibxml_file|
-      [bibxml_file, @relaton_mapping[doi]]
+    @bibxml_mapping.map do |key, bibxml_file|
+      [bibxml_file, @relaton_mapping[key]]
     end.to_h
   end
 

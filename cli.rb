@@ -9,7 +9,7 @@ end
 
 puts "reading bibxml-nist library..."
 bibxml_mapping = Dir["../bibxml-nist/*"].map do |f|
-  [CreateMapping.doi_from_bibxml(read_bibxml(f)), File.basename(f)]
+  [CreateMapping.source_from_bibxml(read_bibxml(f)), File.basename(f)]
 rescue REXML::ParseException => e
   puts "content: "
   puts File.read(f)
@@ -18,7 +18,7 @@ end.to_h
 
 puts "reading relaton-data-nist library..."
 relaton_mapping = Dir["../relaton-data-nist-main/data/*"].map do |f|
-  [CreateMapping.doi_from_relaton(File.read(f)), File.basename(f)]
+  [CreateMapping.source_from_relaton(File.read(f)), File.basename(f)]
 end.to_h
 
 puts "creating map..."

@@ -2,6 +2,7 @@ require_relative "create_mapping"
 
 RSpec.describe CreateMapping do
   let(:doi) { "10.6028/NIST.IR.5591" }
+  let(:source) { "http://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir5591.pdf" }
 
   let(:bibxml_mapping) {
     { doi => bibxml_filename }
@@ -38,6 +39,9 @@ RSpec.describe CreateMapping do
     <<~YAML
       ---
       id: NISTIR5591
+      link:
+      - content: http://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir5591.pdf
+        type: doi
       docid:
       - id: NIST IR 5591
         type: NIST
@@ -60,6 +64,13 @@ RSpec.describe CreateMapping do
     expect(described_class.doi_from_relaton(relaton_content)).to eq(doi)
   end
 
+  it "extracts source from bibxml file" do
+    expect(described_class.source_from_bibxml(bibxml_content)).to eq(source)
+  end
+
+  it "extracts source from relaton file" do
+    expect(described_class.source_from_relaton(relaton_content)).to eq(source)
+  end
   # it "create a map between doi and bibxml file" do
   #   expect(described_class.lookup_bibxml_by(doi)).to eq(bibxml_filename)
   # end
