@@ -71,21 +71,8 @@ RSpec.describe CreateMapping do
   it "extracts source from relaton file" do
     expect(described_class.source_from_relaton(relaton_content)).to eq(source)
   end
-  # it "create a map between doi and bibxml file" do
-  #   expect(described_class.lookup_bibxml_by(doi)).to eq(bibxml_filename)
-  # end
-  #
-  # it "create a map between doi and relaton file" do
-  #   expect(described_class.lookup_relaton_by(doi)).to eq(relaton_filename)
-  # end
 
   it "create a map between bibxml and relaton file" do
     expect(subject.mapping).to eq({ bibxml_filename => relaton_filename })
   end
-
-  # it "returns doi list" do
-  #   expect(subject.bibxml_mapping.keys).to eq([doi])
-  # end
-
-  it "returns missing files in destination"
 end
