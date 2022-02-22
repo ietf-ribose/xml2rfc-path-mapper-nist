@@ -26,8 +26,10 @@ class CreateMapping
       .first.attributes["target"]
   end
 
-  def self.source_from_relaton(content)
-    YAML.load(content)["link"].select { |d| d["type"] == "doi" }.first["content"]
+  def self.source_docid_from_relaton(content)
+    yaml_content = YAML.load(content)
+    [yaml_content["link"].select { |d| d["type"] == "doi" }.first["content"],
+     yaml_content["docid"].select { |d| d["type"] == "NIST" && d.key?("primary") }.first["id"]]
   end
 
   def mapping
