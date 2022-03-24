@@ -1,4 +1,5 @@
 require_relative "create_mapping"
+require "json"
 
 def read_bibxml(file)
   # hack for broken xml files with content like:
@@ -15,21 +16,27 @@ rescue REXML::ParseException => e
   raise "File #{f} parsing error: #{e}"
 end.to_h
 
-STDERR.puts "reading relaton-data-nist library..."
+warn "reading relaton-data-nist library..."
 relaton_mapping = Dir["/tmp/bibxml-to-relaton/relaton-data-nist-main/data/*"]
                     .sort_by { |x| File.mtime(x) }.map do |f|
   CreateMapping.source_docid_from_relaton(File.read(f))
 end.to_h
 
-STDERR.puts "creating map..."
+warn "creating map..."
 map = CreateMapping.new(bibxml_mapping, relaton_mapping)
 
-if !ARGV.empty? && ARGV[0] == "--missing"
-  map.mapping.each do |bibxml_file, relaton_docid|
-    puts "missing #{bibxml_file} to relaton-data-nist" if relaton_docid.nil?
+if ARGV.empty?
+  map.mapping.each do |mapping|
+    puts mapping.to_yaml unless mapping.pubid.nil?
   end
 else
-  map.mapping.each do |bibxml_file, relaton_docid|
-    puts "#{bibxml_file}: #{relaton_docid}" unless relaton_docid.nil?
+  case ARGV[0]
+  when "--to-json"
+    res = { mapping: map.mapping.reject { |m| m.pubid.nil? } }
+    puts res.to_json
+  when "--missing"
+    map.mapping.each do |mapping|
+      puts "missing #{mapping.source} to relaton-data-nist" if mapping.pubid.nil?
+    end
   end
 end
