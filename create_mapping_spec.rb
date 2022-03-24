@@ -74,6 +74,6 @@ RSpec.describe CreateMapping do
   end
 
   it "create a map between bibxml and relaton docid" do
-    expect(subject.mapping).to eq({ bibxml_filename => relaton_docid })
+    expect(subject.mapping).to eq([Mapping.new(bibxml_filename, relaton_docid)])
   end
 end

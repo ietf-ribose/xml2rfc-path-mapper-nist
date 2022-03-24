@@ -1,5 +1,6 @@
 require "rexml"
 require "yaml"
+require_relative "mapping"
 
 SOURCE="bibxml-nist"
 DESTINATION="relaton-data-nist-main"
@@ -34,8 +35,8 @@ class CreateMapping
 
   def mapping
     @bibxml_mapping.map do |key, bibxml_file|
-      [bibxml_file, @relaton_mapping[key]]
-    end.to_h
+      Mapping.new(bibxml_file, @relaton_mapping[key])
+    end
   end
 
   def lookup_source_by(doi)
