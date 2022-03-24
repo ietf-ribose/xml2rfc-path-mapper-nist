@@ -17,6 +17,6 @@ class Mapping
   end
 
   def to_json(*_args)
-    { path: "bibxml2/_#{@source}", docid: @pubid }.to_json
+    { path: "bibxml-nist/#{@source}", docid: @pubid }.to_json
   end
 end
